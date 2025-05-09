@@ -20,4 +20,8 @@ public class ClienteService {
     public Cliente cadastrarCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
+
+    public Cliente atualizarCliente(Cliente cliente) {
+        return clienteRepository.save(cliente);
+    }
 }

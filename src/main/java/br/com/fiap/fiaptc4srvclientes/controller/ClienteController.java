@@ -24,4 +24,8 @@ public class ClienteController {
     public Cliente createCliente(Cliente cliente) {
         return clienteService.cadastrarCliente(cliente);
     }
+
+    public Cliente updateCliente(Cliente cliente) {
+        return clienteService.atualizarCliente(cliente);
+    }
 }
