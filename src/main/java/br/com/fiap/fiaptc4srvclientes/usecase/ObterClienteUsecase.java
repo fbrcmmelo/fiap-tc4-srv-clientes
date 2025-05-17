@@ -1,6 +1,7 @@
 package br.com.fiap.fiaptc4srvclientes.usecase;
 
 import br.com.fiap.fiaptc4srvclientes.domain.Cliente;
+import br.com.fiap.fiaptc4srvclientes.exception.ClienteNaoEncontradoException;
 import br.com.fiap.fiaptc4srvclientes.gateway.ClienteGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

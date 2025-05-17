@@ -1,9 +1,7 @@
 package br.com.fiap.fiaptc4srvclientes.gateway.database.jpa;
 
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import br.com.fiap.fiaptc4srvclientes.domain.Cliente;
 import br.com.fiap.fiaptc4srvclientes.domain.Endereco;
@@ -99,45 +97,52 @@ public class ClienteJpaGateway implements ClienteGateway {
     }
 
     private Cliente mapToDomain(ClienteEntity clienteEntity) {
-        List<Endereco> enderecos = clienteEntity.getEnderecos().stream()
-                .map(this::mapToEnderecoDomain)
-                .collect(Collectors.toList());
-
         return new Cliente(
                 clienteEntity.getId(),
                 clienteEntity.getNome(),
                 clienteEntity.getCpf(),
                 clienteEntity.getDataNascimento(),
-                enderecos);
+                new Endereco(
+                        clienteEntity.getEndereco().getRua(),
+                        clienteEntity.getEndereco().getNumero(),
+                        clienteEntity.getEndereco().getComplemento(),
+                        clienteEntity.getEndereco().getCep(),
+                        clienteEntity.getEndereco().getCidade()
+                )
+        );
     }
 
     private Endereco mapToEnderecoDomain(EnderecoEntity enderecoEntity) {
         return new Endereco(
-                enderecoEntity.getId(),
                 enderecoEntity.getRua(),
                 enderecoEntity.getNumero(),
                 enderecoEntity.getComplemento(),
                 enderecoEntity.getCep(),
-                enderecoEntity.getCidade());
+                enderecoEntity.getCidade()
+        );
     }
 
     private ClienteEntity mapToEntity(Cliente cliente) {
-        List<EnderecoEntity> enderecos = cliente.getEnderecos().stream()
-                .map(this::mapToEnderecoEntity)
-                .collect(Collectors.toList());
 
         return ClienteEntity.builder()
                 .id(cliente.getId())
                 .nome(cliente.getNome())
                 .cpf(cliente.getCpf())
                 .dataNascimento(cliente.getDataNascimento())
-                .enderecos(enderecos)
-                .build();
+                .endereco(new EnderecoEntity(
+                        null,
+                        cliente.getEndereco().getRua(),
+                        cliente.getEndereco().getNumero(),
+                        cliente.getEndereco().getComplemento(),
+                        cliente.getEndereco().getCep(),
+                        cliente.getEndereco().getCidade(),
+                        null
+                )).build();
+
     }
 
     private EnderecoEntity mapToEnderecoEntity(Endereco endereco) {
         return EnderecoEntity.builder()
-                .id(endereco.getId())
                 .rua(endereco.getRua())
                 .numero(endereco.getNumero())
                 .complemento(endereco.getComplemento())

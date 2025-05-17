@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Endereco {
-    private Long id;
     private String rua;
     private String numero;
     private String complemento;

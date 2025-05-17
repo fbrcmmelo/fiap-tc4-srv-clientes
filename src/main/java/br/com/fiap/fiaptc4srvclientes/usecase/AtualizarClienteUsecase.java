@@ -4,6 +4,7 @@ package br.com.fiap.fiaptc4srvclientes.usecase;
 import java.util.Optional;
 
 import br.com.fiap.fiaptc4srvclientes.domain.Cliente;
+import br.com.fiap.fiaptc4srvclientes.exception.ClienteNaoEncontradoException;
 import br.com.fiap.fiaptc4srvclientes.gateway.ClienteGateway;
 import org.springframework.stereotype.Service;
 
