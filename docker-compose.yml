@@ -1,41 +1,42 @@
-  version: '3.8'
+services:
+  db-cliente:
+    image: mysql:latest
+    container_name: db-cliente
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=clientesdb
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=adminpass
+    volumes:
+      - db-cliente-data:/var/lib/mysql
+    networks:
+      - srv-pedido-network
 
-  services:
-    mysql-clientes:
-      image: mysql:8.0
-      container_name: mysql-clientes
-      restart: always
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: clientesdb
-        MYSQL_USER: fiap
-        MYSQL_PASSWORD: fiap123
-      ports:
-        - "3307:3306"  # Muda a porta do host de 3306 para 3307
+  srv-cliente:
+    container_name: srv-cliente
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db-cliente
+    networks:
+      - srv-pedido-network
+    volumes:
+      - srv-cliente-data:/data/clientes
+    environment:
+      - MYSQL_URL=jdbc:mysql://db-cliente/clientesdb
+      - MYSQL_DATABASE=clientesdb
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=adminpass
+    ports:
+      - "8085:8085"
+    restart: always
 
-      volumes:
-        - mysql-data:/var/lib/mysql
-      networks:
-        - clientes-network
+networks:
+  srv-pedido-network:
 
-    api-clientes:
-      container_name: api-clientes
-      build:
-        context: .
-        dockerfile: Dockerfile
-      depends_on:
-        - mysql-clientes
-      environment:
-        - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-clientes:3306/clientesdb
-        - SPRING_DATASOURCE_USERNAME=fiap
-        - SPRING_DATASOURCE_PASSWORD=fiap123
-      ports:
-        - "8080:8080"
-      networks:
-        - clientes-network
-
-  networks:
-    clientes-network:
-
-  volumes:
-    mysql-data:
+volumes:
+    db-cliente-data:
+    srv-cliente-data:

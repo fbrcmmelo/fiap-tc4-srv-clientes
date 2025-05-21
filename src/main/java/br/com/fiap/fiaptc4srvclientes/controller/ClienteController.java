@@ -2,6 +2,7 @@ package br.com.fiap.fiaptc4srvclientes.controller;
 
 import br.com.fiap.fiaptc4srvclientes.model.Cliente;
 import br.com.fiap.fiaptc4srvclientes.service.ClienteService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,6 +14,15 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+
+    // byId
+    @GetMapping("/{id}")
+    public Cliente getClienteById(@PathVariable Integer id) {
+        return clienteService.listarCliente().stream()
+                .filter(cliente -> cliente.getId().equals(id))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new);
+    }
 
     @GetMapping
     public List<Cliente> listClientes() {
